@@ -17,31 +17,15 @@ class TextField {
 class TextFieldCampo extends StatefulWidget {
   final String question;
   final TextEditingController controller;
-  final String hintText;
-  final String? hint2Text;
-  final String helperText;
-  final String? addInfoText;
   final String? Function(String?)? validator;
-  final String? Function(String?)? validator2;
   final Function(String)? onChanged;
-  final String? buttonText;
-  final String? buttonText2;
-  final Function(bool value)? isButton2;
 
   const TextFieldCampo({
     super.key,
     required this.question,
     required this.controller,
-    required this.hintText,
-    required this.helperText,
-    this.addInfoText,
     this.validator,
     this.onChanged,
-    this.hint2Text,
-    this.validator2,
-    this.buttonText,
-    this.buttonText2,
-    this.isButton2,
   });
 
   @override
@@ -49,22 +33,11 @@ class TextFieldCampo extends StatefulWidget {
 }
 
 class _TextFieldCampoState extends State<TextFieldCampo> {
-  late bool _button2;
   String? error;
 
   @override
   void initState() {
-    _button2 = false;
     widget.controller.addListener(() {
-      if (widget.hint2Text?.isNotEmpty == true) {
-        if (_button2) {
-          error = widget.validator2!(widget.controller.text);
-        } else {
-          error = widget.validator!(widget.controller.text);
-        }
-      } else {
-        error = widget.validator!(widget.controller.text);
-      }
       if (!mounted) return;
 
       setState(() {});
@@ -116,11 +89,6 @@ class _TextFieldCampoState extends State<TextFieldCampo> {
                         focusedBorder: _border(),
                         disabledBorder: _border(),
                         focusedErrorBorder: _border(),
-                        hintText: widget.hint2Text?.isNotEmpty == true
-                            ? _button2
-                                ? widget.hint2Text
-                                : widget.hintText
-                            : widget.hintText,
                         hintStyle: TextThemeApp.textTheme(
                           TextStyleNum.headline2,
                           context,
@@ -144,18 +112,7 @@ class _TextFieldCampoState extends State<TextFieldCampo> {
                 textStyleNum: TextStyleNum.headline1,
                 fontWeightNum: FontWeightNum.w400,
               ),
-            const SizedBox(
-              height: 8,
-            ),
-            if (widget.addInfoText?.isNotEmpty ?? false)
-              TextWidget(
-                textStyleNum: TextStyleNum.headline0,
-                text: widget.addInfoText!,
-                fontWeightNum: FontWeightNum.w400,
-              ),
-            const SizedBox(
-              height: 16,
-            ),
+            const SizedBox(height: 16)
           ],
         ),
       ),
@@ -167,10 +124,12 @@ class _TextFieldCampoState extends State<TextFieldCampo> {
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(8),
           bottomLeft: Radius.circular(8),
+          bottomRight: Radius.circular(8),
+          topRight: Radius.circular(8),
         ),
         borderSide: BorderSide(
           color: Color(0xFF9B9EB2),
-          width: 0.5,
+          width: 1.5,
         ));
   }
 }

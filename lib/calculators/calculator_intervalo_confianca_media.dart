@@ -1,3 +1,4 @@
+import 'dart:js_util';
 import 'dart:math';
 
 import 'package:calculadoras_estatistica/widgets/text_field.dart';
@@ -6,6 +7,7 @@ import '../widgets/app_bar.dart';
 import '../widgets/drop_down_widget.dart';
 import '../widgets/text_widget.dart';
 import '../widgets/theme.dart';
+import 'calculator.dart';
 
 class CalculatorIntervaloConfiancaMediaParamsValueItem {
   final String name;
@@ -112,11 +114,26 @@ class _CalculatorIntervaloConfiancaMediaState extends State<CalculatorIntervaloC
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: FloatingActionButton(
+                          onPressed: () {
+                            showModalBottomSheet(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return const Calculator();
+                                },
+                                backgroundColor: Colors.black);
+                          },
+                          child: const Icon(Icons.calculate),
+                        ),
+                      ),
+                    ),
                     TextFieldCampo(
                       question: 'Média',
                       controller: _controllerMedia,
-                      hintText: '',
-                      helperText: '',
                       onChanged: (value) {
                         params.media = double.tryParse(value) ?? 0;
                       },
@@ -144,8 +161,6 @@ class _CalculatorIntervaloConfiancaMediaState extends State<CalculatorIntervaloC
                     TextFieldCampo(
                       question: 'Desvio Padrão',
                       controller: _controllerDesvioPadrao,
-                      hintText: '',
-                      helperText: '',
                       onChanged: (value) {
                         params.desvioPadrao = double.tryParse(value) ?? 0;
                       },
@@ -159,8 +174,6 @@ class _CalculatorIntervaloConfiancaMediaState extends State<CalculatorIntervaloC
                     TextFieldCampo(
                       question: 'Tamanho da Amostra (n)',
                       controller: _controllerTamanhoAmostra,
-                      hintText: '',
-                      helperText: '',
                       onChanged: (value) {
                         params.tamanhoAmostra = double.tryParse(value) ?? 0;
                       },

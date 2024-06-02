@@ -3,6 +3,8 @@ import 'package:calculadoras_estatistica/routes/router.dart';
 import 'package:calculadoras_estatistica/widgets/navigation.dart';
 import 'package:flutter/material.dart';
 
+import 'calculators/calculator.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -71,6 +73,23 @@ class _MyHomePageState extends State<MyHomePage> {
                 onPressed: () {
                   Navigator.pushNamed(context, RouteNames.calculadoraTamanhoAmostraMedia);
                 },
+              ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: FloatingActionButton(
+                    onPressed: () {
+                      showModalBottomSheet(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return const Calculator();
+                          },
+                          backgroundColor: Colors.black);
+                    },
+                    child: const Icon(Icons.calculate),
+                  ),
+                ),
               ),
             ])
           ],

@@ -4,6 +4,7 @@ import '../widgets/app_bar.dart';
 import '../widgets/drop_down_widget.dart';
 import '../widgets/text_widget.dart';
 import '../widgets/theme.dart';
+import 'calculator.dart';
 
 class CalculatorTamanhoAmostraProporcaoParamsValueItem {
   final String name;
@@ -102,6 +103,23 @@ class _CalculatorTamanhoAmostraProporcaoState extends State<CalculatorTamanhoAmo
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: FloatingActionButton(
+                          onPressed: () {
+                            showModalBottomSheet(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return const Calculator();
+                                },
+                                backgroundColor: Colors.black);
+                          },
+                          child: const Icon(Icons.calculate),
+                        ),
+                      ),
+                    ),
                     _contentDropDown(
                       params.grauConfianca.name,
                       grauConfiancaNames,
@@ -119,8 +137,6 @@ class _CalculatorTamanhoAmostraProporcaoState extends State<CalculatorTamanhoAmo
                     TextFieldCampo(
                       question: 'P',
                       controller: _controllerP,
-                      hintText: '',
-                      helperText: '',
                       onChanged: (value) {
                         params.p = double.tryParse(value) ?? 0;
                       },
@@ -135,8 +151,6 @@ class _CalculatorTamanhoAmostraProporcaoState extends State<CalculatorTamanhoAmo
                     TextFieldCampo(
                       question: 'Erro (Ep)',
                       controller: _controllerErro,
-                      hintText: '',
-                      helperText: '',
                       onChanged: (value) {
                         params.erro = double.tryParse(value) ?? 0;
                       },
@@ -147,7 +161,6 @@ class _CalculatorTamanhoAmostraProporcaoState extends State<CalculatorTamanhoAmo
                         return null;
                       },
                     ),
-                    const SizedBox(height: 16),
                     Container(
                       alignment: Alignment.center,
                       child: ElevatedButton(

@@ -4,6 +4,7 @@ import '../widgets/app_bar.dart';
 import '../widgets/drop_down_widget.dart';
 import '../widgets/text_widget.dart';
 import '../widgets/theme.dart';
+import 'calculator.dart';
 
 class CalculatorTamanhoAmostraMediaParamsValueItem {
   final String name;
@@ -100,6 +101,23 @@ class _CalculatorTamanhoAmostraMediaState extends State<CalculatorTamanhoAmostra
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: FloatingActionButton(
+                          onPressed: () {
+                            showModalBottomSheet(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return const Calculator();
+                                },
+                                backgroundColor: Colors.black);
+                          },
+                          child: const Icon(Icons.calculate),
+                        ),
+                      ),
+                    ),
                     _contentDropDown(
                       params.grauConfianca.name,
                       grauConfiancaNames,
@@ -117,8 +135,6 @@ class _CalculatorTamanhoAmostraMediaState extends State<CalculatorTamanhoAmostra
                     TextFieldCampo(
                       question: 'Desvio Padrão',
                       controller: _controllerDesvioPadrao,
-                      hintText: '',
-                      helperText: '',
                       onChanged: (value) {
                         params.desvioPadrao = double.tryParse(value) ?? 0;
                       },
@@ -132,8 +148,6 @@ class _CalculatorTamanhoAmostraMediaState extends State<CalculatorTamanhoAmostra
                     TextFieldCampo(
                       question: 'Erro (Em)',
                       controller: _controllerErro,
-                      hintText: '',
-                      helperText: '',
                       onChanged: (value) {
                         params.erro = double.tryParse(value) ?? 0;
                       },

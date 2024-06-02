@@ -4,6 +4,7 @@ import '../widgets/app_bar.dart';
 import '../widgets/drop_down_widget.dart';
 import '../widgets/text_widget.dart';
 import '../widgets/theme.dart';
+import 'calculator.dart';
 
 class CalculatorIntervaloConfiancaProporcaoParamsValueItem {
   final String name;
@@ -106,6 +107,23 @@ class _CalculatorIntervaloConfiancaProporcaoState extends State<CalculatorInterv
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: FloatingActionButton(
+                          onPressed: () {
+                            showModalBottomSheet(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return const Calculator();
+                                },
+                                backgroundColor: Colors.black);
+                          },
+                          child: const Icon(Icons.calculate),
+                        ),
+                      ),
+                    ),
                     _contentDropDown(
                       params.grauConfianca.name,
                       grauConfiancaNames,
@@ -123,8 +141,6 @@ class _CalculatorIntervaloConfiancaProporcaoState extends State<CalculatorInterv
                     TextFieldCampo(
                       question: 'P',
                       controller: _controllerP,
-                      hintText: '',
-                      helperText: '',
                       onChanged: (value) {
                         params.p = double.tryParse(value) ?? 0;
                         _onChange();
@@ -140,8 +156,6 @@ class _CalculatorIntervaloConfiancaProporcaoState extends State<CalculatorInterv
                     TextFieldCampo(
                       question: 'Tamanho da Amostra (n)',
                       controller: _controllerTamanhoAmostra,
-                      hintText: '',
-                      helperText: '',
                       onChanged: (value) {
                         params.tamanhoAmostra = double.tryParse(value) ?? 0;
                       },
