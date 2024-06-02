@@ -304,6 +304,11 @@ class _CalculatorIntervaloConfiancaMediaState extends State<CalculatorIntervaloC
     double intervaloConfianca1 = media - erroMedia;
     double intervaloConfianca2 = media + erroMedia;
 
+    if (alfa.isNaN) alfa = 0;
+    if (erroMedia.isNaN) erroMedia = 0;
+    if (intervaloConfianca2.isNaN) intervaloConfianca2 = 0;
+    if (intervaloConfianca1.isNaN) intervaloConfianca1 = 0;
+
     return (alfa, erroMedia, intervaloConfianca1, intervaloConfianca2);
   }
 
