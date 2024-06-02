@@ -1,4 +1,3 @@
-import 'dart:js_util';
 import 'dart:math';
 
 import 'package:calculadoras_estatistica/widgets/text_field.dart';

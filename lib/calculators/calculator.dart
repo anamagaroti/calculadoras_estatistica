@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class Calculator extends StatefulWidget {
   const Calculator({super.key});
   @override
+  // ignore: library_private_types_in_public_api
   _CalculatorState createState() => _CalculatorState();
 }
 
