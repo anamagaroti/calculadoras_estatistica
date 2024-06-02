@@ -1,0 +1,6 @@
+//coloque esse comando no terminal para gerar o apk, ps: vai demorar um pouco.
+//após isso o APK vai estar na pasta build que esta dentro do projeto.
+//caminho: build/app/outputs/flutter-apk/
+//vão  ter varios, o que roda no meu celular é o "app-arm64-v8a-release.apk"
+
+flutter build apk --split-per-abi
