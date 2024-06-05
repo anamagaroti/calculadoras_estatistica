@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:calculadoras_estatistica/widgets/text_field.dart';
 import 'package:flutter/material.dart';
 import '../widgets/app_bar.dart';
@@ -46,8 +48,10 @@ class _CalculatorIntervaloConfiancaProporcaoState extends State<CalculatorInterv
   late double intervaloConfianca2;
   late double erroProporcao;
   late double umP;
+  late double p;
   late final TextEditingController _controllerP = TextEditingController();
   late final TextEditingController _controllerTamanhoAmostra = TextEditingController();
+  final FocusNode _focusNodeP = FocusNode();
 
   CalculatorIntervaloConfiancaProporcaoParams inicializacao() {
     return CalculatorIntervaloConfiancaProporcaoParams(
@@ -72,13 +76,32 @@ class _CalculatorIntervaloConfiancaProporcaoState extends State<CalculatorInterv
     intervaloConfianca2 = 0;
     erroProporcao = 0;
     umP = 0;
+    p = 0;
     params = inicializacao();
+
     super.initState();
+
+    _focusNodeP.addListener(() {
+      if (!_focusNodeP.hasFocus) {
+        setState(() {
+          _onChange();
+          _controllerP.text = p.toStringAsFixed(2);
+        });
+      }
+    });
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    _focusNodeP.dispose();
+    _controllerP.dispose();
+    _controllerTamanhoAmostra.dispose();
+    super.dispose();
   }
 
   @override
@@ -124,6 +147,36 @@ class _CalculatorIntervaloConfiancaProporcaoState extends State<CalculatorInterv
                         ),
                       ),
                     ),
+                    TextFieldCampo(
+                      question: 'Tamanho da Amostra (n)',
+                      controller: _controllerTamanhoAmostra,
+                      onChanged: (value) {
+                        params.tamanhoAmostra = double.tryParse(value) ?? 0;
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Campo obrigatório";
+                        }
+                        return null;
+                      },
+                    ),
+                    TextFieldCampo(
+                      focusNode: _focusNodeP,
+                      question: 'P',
+                      controller: _controllerP,
+                      onChanged: (value) {
+                        setState(() {
+                          params.p = double.tryParse(_controllerP.text) ?? 0;
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Campo obrigatório";
+                        }
+                        return null;
+                      },
+                    ),
+                    _value('1 - p: ', umP.toStringAsFixed(2), Colors.blueGrey),
                     _contentDropDown(
                       params.grauConfianca.name,
                       grauConfiancaNames,
@@ -138,49 +191,12 @@ class _CalculatorIntervaloConfiancaProporcaoState extends State<CalculatorInterv
                         });
                       },
                     ),
-                    TextFieldCampo(
-                      question: 'P',
-                      controller: _controllerP,
-                      onChanged: (value) {
-                        params.p = double.tryParse(value) ?? 0;
-                        _onChange();
-                      },
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "Campo obrigatório";
-                        }
-                        return null;
-                      },
-                    ),
-                    _value('1 - p: ', umP.toStringAsFixed(2), Colors.blueGrey),
-                    TextFieldCampo(
-                      question: 'Tamanho da Amostra (n)',
-                      controller: _controllerTamanhoAmostra,
-                      onChanged: (value) {
-                        params.tamanhoAmostra = double.tryParse(value) ?? 0;
-                      },
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "Campo obrigatório";
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 16),
-                    Container(
-                      alignment: Alignment.center,
-                      child: ElevatedButton(
-                        onPressed: _onChange,
-                        style: ElevatedButton.styleFrom(backgroundColor: Colors.blueGrey),
-                        child: const Text("Calcular", style: TextStyle(color: Colors.white, fontSize: 20)),
-                      ),
-                    ),
                     const SizedBox(height: 34),
                     _value('Erro Proporção(Ep): ', erroProporcao.toStringAsFixed(2), Colors.blueGrey),
                     _value('Intervalo de confiança -', intervaloConfianca1.toStringAsFixed(2), Colors.blueGrey),
                     Container(
                       alignment: Alignment.center,
-                      child: const Text("< Y <"),
+                      child: const Text("<    π    <"),
                     ),
                     _value('Intervalo de confiança +', intervaloConfianca2.toStringAsFixed(2), Colors.blueGrey),
                   ],
@@ -271,11 +287,6 @@ class _CalculatorIntervaloConfiancaProporcaoState extends State<CalculatorInterv
     );
   }
 
-  (double, double, double, double) calculatorIntervaloConfiancaProporcao(
-      CalculatorIntervaloConfiancaProporcaoParams values) {
-    throw UnimplementedError();
-  }
-
   void _onChange() {
     final result = calculatorIntervaloConfiancaProporcao(params);
 
@@ -283,9 +294,42 @@ class _CalculatorIntervaloConfiancaProporcaoState extends State<CalculatorInterv
     erroProporcao = result.$2;
     intervaloConfianca1 = result.$3;
     intervaloConfianca2 = result.$4;
+    p = result.$5;
 
     if (!mounted) return;
 
     setState(() {});
+  }
+
+  (double, double, double, double, double) calculatorIntervaloConfiancaProporcao(
+      CalculatorIntervaloConfiancaProporcaoParams values) {
+    double valorP = 0;
+    double umP = 0;
+    double erroProporcao = 0;
+    double intervaloConfianca1 = 0;
+    double intervaloConfianca2 = 0;
+
+    double valorGrauconfianca = 0;
+
+    final tamanhoAmostra = values.tamanhoAmostra;
+    final grauConfianca = values.grauConfianca.value.value;
+    final p = values.p;
+
+    valorP = p / tamanhoAmostra;
+
+    if (grauConfianca == 1) valorGrauconfianca = 1.645;
+    if (grauConfianca == 2) valorGrauconfianca = 1.96;
+    if (grauConfianca == 3) valorGrauconfianca = 2.575;
+
+    umP = 1 - valorP;
+
+    double calculo = valorP * umP / tamanhoAmostra;
+
+    erroProporcao = valorGrauconfianca * sqrt(calculo);
+
+    intervaloConfianca1 = valorP - erroProporcao;
+    intervaloConfianca2 = valorP + erroProporcao;
+
+    return (umP, erroProporcao, intervaloConfianca1, intervaloConfianca2, valorP);
   }
 }

@@ -19,6 +19,7 @@ class TextFieldCampo extends StatefulWidget {
   final TextEditingController controller;
   final String? Function(String?)? validator;
   final Function(String)? onChanged;
+  final FocusNode? focusNode;
 
   const TextFieldCampo({
     super.key,
@@ -26,6 +27,7 @@ class TextFieldCampo extends StatefulWidget {
     required this.controller,
     this.validator,
     this.onChanged,
+    this.focusNode,
   });
 
   @override
@@ -42,6 +44,7 @@ class _TextFieldCampoState extends State<TextFieldCampo> {
 
       setState(() {});
     });
+
     super.initState();
   }
 
@@ -72,6 +75,7 @@ class _TextFieldCampoState extends State<TextFieldCampo> {
                   child: Container(
                     color: Colors.white,
                     child: TextFormField(
+                      focusNode: widget.focusNode,
                       controller: widget.controller,
                       onChanged: widget.onChanged,
                       autovalidateMode: AutovalidateMode.onUserInteraction,

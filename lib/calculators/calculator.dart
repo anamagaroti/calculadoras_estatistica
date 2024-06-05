@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class Calculator extends StatefulWidget {
   const Calculator({super.key});
@@ -12,6 +13,7 @@ class _CalculatorState extends State<Calculator> {
   double num2 = 0;
   String result = '';
   late String operator;
+  final NumberFormat numberFormat = NumberFormat("#,##0.####");
 
   void buttonPressed(String buttonText) {
     setState(() {
@@ -41,8 +43,8 @@ class _CalculatorState extends State<Calculator> {
         }
         operator = '';
       } else if (buttonText == '%') {
-        num1 = double.parse(result);
-        result = (num1 / 100).toStringAsFixed(1);
+        num2 = double.parse(result);
+        result = ((num1 * num2) / 100).toStringAsFixed(1);
       } else {
         result = result == '' ? buttonText : result + buttonText;
       }
@@ -51,13 +53,14 @@ class _CalculatorState extends State<Calculator> {
 
   @override
   Widget build(BuildContext context) {
+    String formattedResult = result.isNotEmpty ? numberFormat.format(double.parse(result)) : result;
     return Container(
       padding: const EdgeInsets.all(16),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            result,
+            formattedResult,
             style: const TextStyle(fontSize: 48, color: Colors.white),
           ),
           const Divider(),

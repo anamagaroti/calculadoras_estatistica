@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:calculadoras_estatistica/widgets/text_field.dart';
 import 'package:flutter/material.dart';
 import '../widgets/app_bar.dart';
@@ -42,7 +44,7 @@ class CalculatorTamanhoAmostraMedia extends StatefulWidget {
 
 class _CalculatorTamanhoAmostraMediaState extends State<CalculatorTamanhoAmostraMedia> {
   late final CalculatorTamanhoAmostraMediaParams params;
-  late double tamanhoAmostra;
+  late int tamanhoAmostra;
   late final TextEditingController _controllerDesvioPadrao = TextEditingController();
   late final TextEditingController _controllerErro = TextEditingController();
 
@@ -168,7 +170,7 @@ class _CalculatorTamanhoAmostraMediaState extends State<CalculatorTamanhoAmostra
                       ),
                     ),
                     const SizedBox(height: 34),
-                    _value('Tamanho amostra(n): ', tamanhoAmostra.toStringAsFixed(2), Colors.blueGrey),
+                    _value('Tamanho amostra(n): ', tamanhoAmostra.toString(), Colors.blueGrey),
                   ],
                 ),
               ],
@@ -257,17 +259,38 @@ class _CalculatorTamanhoAmostraMediaState extends State<CalculatorTamanhoAmostra
     );
   }
 
-  double calculatorTamanhoAmostraMedia(CalculatorTamanhoAmostraMediaParams values) {
-    throw UnimplementedError();
-  }
-
   void _onChange() {
     final result = calculatorTamanhoAmostraMedia(params);
 
-    tamanhoAmostra = result;
+    tamanhoAmostra = result.toInt();
 
     if (!mounted) return;
 
     setState(() {});
+  }
+
+  double calculatorTamanhoAmostraMedia(CalculatorTamanhoAmostraMediaParams values) {
+    double tamanhoAmostra = 0;
+    double valorGrauConfianca = 0;
+
+    final grauConfianca = values.grauConfianca.value.value;
+    final desvioPadrao = values.desvioPadrao;
+    final erro = values.erro;
+
+    if (grauConfianca == 1) valorGrauConfianca = 1.645;
+    if (grauConfianca == 2) valorGrauConfianca = 1.96;
+    if (grauConfianca == 3) valorGrauConfianca = 2.575;
+
+    double calculo = valorGrauConfianca * desvioPadrao / erro;
+
+    tamanhoAmostra = calculo * calculo;
+
+    bool resto = (tamanhoAmostra % 1) > 0;
+
+    if (resto) {
+      tamanhoAmostra += 1;
+    }
+
+    return tamanhoAmostra;
   }
 }

@@ -42,7 +42,7 @@ class CalculatorTamanhoAmostraProporcao extends StatefulWidget {
 
 class _CalculatorTamanhoAmostraProporcaoState extends State<CalculatorTamanhoAmostraProporcao> {
   late final CalculatorTamanhoAmostraProporcaoParams params;
-  late double tamanhoAmostra;
+  late int tamanhoAmostra;
   late double umP;
   late final TextEditingController _controllerP = TextEditingController();
   late final TextEditingController _controllerErro = TextEditingController();
@@ -120,6 +120,23 @@ class _CalculatorTamanhoAmostraProporcaoState extends State<CalculatorTamanhoAmo
                         ),
                       ),
                     ),
+                    TextFieldCampo(
+                      question: 'P',
+                      controller: _controllerP,
+                      onChanged: (value) {
+                        setState(() {
+                          params.p = double.tryParse(value) ?? 0;
+                        });
+                        _onChange();
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Campo obrigatório";
+                        }
+                        return null;
+                      },
+                    ),
+                    _value('1 - p: ', umP.toStringAsFixed(2), Colors.blueGrey),
                     _contentDropDown(
                       params.grauConfianca.name,
                       grauConfiancaNames,
@@ -134,20 +151,6 @@ class _CalculatorTamanhoAmostraProporcaoState extends State<CalculatorTamanhoAmo
                         });
                       },
                     ),
-                    TextFieldCampo(
-                      question: 'P',
-                      controller: _controllerP,
-                      onChanged: (value) {
-                        params.p = double.tryParse(value) ?? 0;
-                      },
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "Campo obrigatório";
-                        }
-                        return null;
-                      },
-                    ),
-                    _value('1 - p: ', umP.toStringAsFixed(2), Colors.blueGrey),
                     TextFieldCampo(
                       question: 'Erro (Ep)',
                       controller: _controllerErro,
@@ -170,7 +173,7 @@ class _CalculatorTamanhoAmostraProporcaoState extends State<CalculatorTamanhoAmo
                       ),
                     ),
                     const SizedBox(height: 34),
-                    _value('Tamanho amostra(n): ', tamanhoAmostra.toStringAsFixed(2), Colors.blueGrey),
+                    _value('Tamanho amostra(n): ', tamanhoAmostra.toString(), Colors.blueGrey),
                   ],
                 ),
               ],
@@ -259,18 +262,44 @@ class _CalculatorTamanhoAmostraProporcaoState extends State<CalculatorTamanhoAmo
     );
   }
 
-  (double, double) calculatorTamanhoAmostraProporcao(CalculatorTamanhoAmostraProporcaoParams values) {
-    throw UnimplementedError();
-  }
-
   void _onChange() {
     final result = calculatorTamanhoAmostraProporcao(params);
 
-    tamanhoAmostra = result.$2;
     umP = result.$1;
+    tamanhoAmostra = result.$2.toInt();
 
     if (!mounted) return;
 
     setState(() {});
+  }
+
+  (double, double) calculatorTamanhoAmostraProporcao(CalculatorTamanhoAmostraProporcaoParams values) {
+    double tamanhoAmostra = 0;
+    double valorGrauConfianca = 0;
+    double umP = 0;
+
+    final grauConfianca = values.grauConfianca.value.value;
+    final p = values.p;
+    final erro = values.erro;
+
+    if (grauConfianca == 1) valorGrauConfianca = 1.645;
+    if (grauConfianca == 2) valorGrauConfianca = 1.96;
+    if (grauConfianca == 3) valorGrauConfianca = 2.575;
+
+    umP = 1 - p;
+
+    double grauConfiancaCalculo = valorGrauConfianca * valorGrauConfianca;
+    double erroCalculo = erro * erro;
+    double calculo = grauConfiancaCalculo * p * umP / erroCalculo;
+
+    tamanhoAmostra = calculo;
+
+    bool resto = (tamanhoAmostra % 1) > 0;
+
+    if (resto) {
+      tamanhoAmostra += 1;
+    }
+
+    return (umP, tamanhoAmostra);
   }
 }

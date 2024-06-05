@@ -195,7 +195,7 @@ class _CalculatorIntervaloConfiancaMediaState extends State<CalculatorIntervaloC
                     _value('Intervalo de confiança -', intervaloConfianca1.toStringAsFixed(2), Colors.blueGrey),
                     Container(
                       alignment: Alignment.center,
-                      child: const Text("< Y <"),
+                      child: const Text("<    μ    <"),
                     ),
                     _value('Intervalo de confiança +', intervaloConfianca2.toStringAsFixed(2), Colors.blueGrey),
                   ],
