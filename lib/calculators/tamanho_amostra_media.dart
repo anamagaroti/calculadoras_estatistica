@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:calculadoras_estatistica/widgets/text_field.dart';
 import 'package:flutter/material.dart';
 import '../widgets/app_bar.dart';
@@ -290,6 +288,8 @@ class _CalculatorTamanhoAmostraMediaState extends State<CalculatorTamanhoAmostra
     if (resto) {
       tamanhoAmostra += 1;
     }
+
+    if (tamanhoAmostra.isNaN) tamanhoAmostra = 0;
 
     return tamanhoAmostra;
   }

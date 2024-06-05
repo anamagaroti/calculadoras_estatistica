@@ -66,42 +66,42 @@ class _CalculatorState extends State<Calculator> {
           const Divider(),
           Row(
             children: [
-              buildButton('C', FontWeight.w900, Colors.red, Colors.black),
-              buildButton('%', FontWeight.w900, Colors.red, Colors.black),
-              buildButton('x', FontWeight.w900, Colors.red, Colors.black),
-              buildButton('DEL', FontWeight.w900, Colors.red, Colors.black),
+              buildButton('C', FontWeight.w900, Colors.red, Colors.black, 20),
+              buildButton('%', FontWeight.w900, Colors.red, Colors.black, 20),
+              buildButton('x', FontWeight.w900, Colors.red, Colors.black, 20),
+              buildButton('DEL', FontWeight.w900, Colors.red, Colors.black, 16),
             ],
           ),
           Row(
             children: [
-              buildButton('1', FontWeight.normal, Colors.white, Colors.black),
-              buildButton('2', FontWeight.normal, Colors.white, Colors.black),
-              buildButton('3', FontWeight.normal, Colors.white, Colors.black),
-              buildButton('/', FontWeight.w900, Colors.red, Colors.black)
+              buildButton('1', FontWeight.normal, Colors.white, Colors.black, 20),
+              buildButton('2', FontWeight.normal, Colors.white, Colors.black, 20),
+              buildButton('3', FontWeight.normal, Colors.white, Colors.black, 20),
+              buildButton('/', FontWeight.w900, Colors.red, Colors.black, 20)
             ],
           ),
           Row(
             children: [
-              buildButton('4', FontWeight.normal, Colors.white, Colors.black),
-              buildButton('5', FontWeight.normal, Colors.white, Colors.black),
-              buildButton('6', FontWeight.normal, Colors.white, Colors.black),
-              buildButton('-', FontWeight.w900, Colors.red, Colors.black)
+              buildButton('4', FontWeight.normal, Colors.white, Colors.black, 20),
+              buildButton('5', FontWeight.normal, Colors.white, Colors.black, 20),
+              buildButton('6', FontWeight.normal, Colors.white, Colors.black, 20),
+              buildButton('-', FontWeight.w900, Colors.red, Colors.black, 20)
             ],
           ),
           Row(
             children: [
-              buildButton('7', FontWeight.normal, Colors.white, Colors.black),
-              buildButton('8', FontWeight.normal, Colors.white, Colors.black),
-              buildButton('9', FontWeight.normal, Colors.white, Colors.black),
-              buildButton('+', FontWeight.w900, Colors.red, Colors.black)
+              buildButton('7', FontWeight.normal, Colors.white, Colors.black, 20),
+              buildButton('8', FontWeight.normal, Colors.white, Colors.black, 20),
+              buildButton('9', FontWeight.normal, Colors.white, Colors.black, 20),
+              buildButton('+', FontWeight.w900, Colors.red, Colors.black, 20)
             ],
           ),
           Row(
             children: [
-              buildButton('', FontWeight.w900, Colors.red, Colors.black),
-              buildButton('0', FontWeight.normal, Colors.white, Colors.black),
-              buildButton('.', FontWeight.w900, Colors.red, Colors.black),
-              buildButton('=', FontWeight.w900, Colors.red, Colors.black),
+              buildButton('', FontWeight.w900, Colors.red, Colors.black, 20),
+              buildButton('0', FontWeight.normal, Colors.white, Colors.black, 20),
+              buildButton('.', FontWeight.w900, Colors.red, Colors.black, 20),
+              buildButton('=', FontWeight.w900, Colors.red, Colors.black, 20),
             ],
           ),
         ],
@@ -109,12 +109,7 @@ class _CalculatorState extends State<Calculator> {
     );
   }
 
-  Widget buildButton(
-    String buttonText,
-    FontWeight? bold,
-    Color? color,
-    Color? backgroundColor,
-  ) {
+  Widget buildButton(String buttonText, FontWeight? bold, Color? color, Color? backgroundColor, double tamanho) {
     return Expanded(
         child: ElevatedButton(
             onPressed: () => buttonPressed(buttonText),
@@ -128,6 +123,6 @@ class _CalculatorState extends State<Calculator> {
                 },
               ),
             ),
-            child: Text(buttonText, style: TextStyle(fontSize: 20, fontWeight: bold!, color: color))));
+            child: Text(buttonText, style: TextStyle(fontSize: tamanho, fontWeight: bold!, color: color))));
   }
 }

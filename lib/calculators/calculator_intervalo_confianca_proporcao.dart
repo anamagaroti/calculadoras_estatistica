@@ -330,6 +330,12 @@ class _CalculatorIntervaloConfiancaProporcaoState extends State<CalculatorInterv
     intervaloConfianca1 = valorP - erroProporcao;
     intervaloConfianca2 = valorP + erroProporcao;
 
+    if (valorP.isNaN) valorP = 0;
+    if (umP.isNaN) umP = 0;
+    if (erroProporcao.isNaN) erroProporcao = 0;
+    if (intervaloConfianca2.isNaN) intervaloConfianca2 = 0;
+    if (intervaloConfianca1.isNaN) intervaloConfianca1 = 0;
+
     return (umP, erroProporcao, intervaloConfianca1, intervaloConfianca2, valorP);
   }
 }

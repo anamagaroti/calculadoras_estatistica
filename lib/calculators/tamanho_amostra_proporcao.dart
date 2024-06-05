@@ -300,6 +300,9 @@ class _CalculatorTamanhoAmostraProporcaoState extends State<CalculatorTamanhoAmo
       tamanhoAmostra += 1;
     }
 
+    if (umP.isNaN) umP = 0;
+    if (tamanhoAmostra.isNaN) tamanhoAmostra = 0;
+
     return (umP, tamanhoAmostra);
   }
 }
